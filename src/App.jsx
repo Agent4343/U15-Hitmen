@@ -30,7 +30,7 @@ const TESTIMONIALS = [
 
 const DRAW_DATE = "April 14, 2026";
 const DRAW_DATE_ISO = "2026-04-14T20:00:00-03:00";
-const FACEBOOK_URL = "https://www.facebook.com/share/g/1E3h74upXv/?mibextid=wwXIfr";
+const FACEBOOK_URL = "https://www.facebook.com/profile.php/?id=61565613223653";
 const DEFAULT_POSTER_PATH = "/images/hitmen.jpg";
 const FALLBACK_PHOTO_URL =
   "https://images.unsplash.com/photo-1515703407324-5f753afd8be8?auto=format&fit=crop&w=1400&q=80";
@@ -283,7 +283,7 @@ export default function App() {
         <header className="hero">
           <p className="badge">FUNDRAISER</p>
           <h1>Eastern Hitmen U15 AAA</h1>
-          <p className="subhead">Atlantic Hockey Championship</p>
+          <p className="subhead">2025-26 Season</p>
         </header>
 
         <section className="urgency">
@@ -322,14 +322,14 @@ export default function App() {
         </section>
 
         <section className="story">
-          <h2>Help Us Get to Atlantics</h2>
+          <h2>Welcome to the 2025-26 Season</h2>
           <p>
-            Our players earned the chance to represent our region in Clarenville, NL. Every ticket
-            purchased helps cover travel, accommodations, and tournament costs for the team.
+            Welcome to the 2025-26 season of the Eastern Hitmen U15 AAA. Based in eastern
+            Newfoundland, we are a hockey team playing in the Newfoundland and Labrador Major U15
+            AAA Hockey League.
           </p>
           <p>
-            You are not just buying a ticket. You are backing these athletes and helping create a
-            lifetime memory.
+            Thank you for supporting our players and helping our team compete at the highest level.
           </p>
         </section>
 
