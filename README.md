@@ -23,7 +23,7 @@ npm run dev
 Create a `.env` file (or set these in Railway):
 
 ```bash
-# Optional: if omitted, app uses /team-poster.jpg from /public
+# Optional: if omitted, app uses /images/hitmen.jpg from /public
 VITE_TEAM_PHOTO_URL=https://your-team-photo-url
 VITE_ADMIN_PASSCODE=your-secret-passcode
 VITE_TRAVEL_GOAL=5000
@@ -31,13 +31,14 @@ VITE_TRAVEL_GOAL=5000
 
 ### Using your exact fundraiser poster
 
-To use your uploaded team image poster directly:
+The app now defaults to:
 
-1. Save the image as `team-poster.jpg`
-2. Place it at `public/team-poster.jpg`
-3. Do not set `VITE_TEAM_PHOTO_URL` (or remove it)
+- `public/images/hitmen.jpg`
 
-The app will automatically use `public/team-poster.jpg` first, then fallback to URL/env image.
+If you want to replace it:
+
+1. Keep the same file name/path (`public/images/hitmen.jpg`) **or**
+2. Set `VITE_TEAM_PHOTO_URL` to another hosted image URL.
 
 ## Railway deployment
 

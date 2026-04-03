@@ -31,7 +31,7 @@ const TESTIMONIALS = [
 const DRAW_DATE = "April 14, 2026";
 const DRAW_DATE_ISO = "2026-04-14T20:00:00-03:00";
 const FACEBOOK_URL = "https://www.facebook.com/share/g/1E3h74upXv/?mibextid=wwXIfr";
-const DEFAULT_POSTER_PATH = "/images/team-poster.jpg";
+const DEFAULT_POSTER_PATH = "/images/hitmen.jpg";
 const FALLBACK_PHOTO_URL =
   "https://images.unsplash.com/photo-1515703407324-5f753afd8be8?auto=format&fit=crop&w=1400&q=80";
 const TEAM_PHOTO_URL = import.meta.env.VITE_TEAM_PHOTO_URL || DEFAULT_POSTER_PATH;
