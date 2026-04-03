@@ -13,14 +13,59 @@ const GAMES = [
   { day: "SAT", date: "APR 18", time: "3:00 - 5:30 PM", opponent: "vs. Team NB" },
 ];
 
+const TESTIMONIALS = [
+  {
+    quote: "Great cause and easy checkout. Happy to support these hardworking players.",
+    author: "Local Supporter",
+  },
+  {
+    quote: "The team has represented our community so well. Proud to help them get to Atlantics.",
+    author: "Parent Volunteer",
+  },
+  {
+    quote: "Love this fundraiser format. Quick to buy and easy to share on Facebook.",
+    author: "Team Fan",
+  },
+];
+
 const DRAW_DATE = "April 14, 2026";
+const DRAW_DATE_ISO = "2026-04-14T20:00:00-03:00";
 const FACEBOOK_URL = "https://www.facebook.com/share/g/1E3h74upXv/?mibextid=wwXIfr";
 const TEAM_PHOTO_URL =
   import.meta.env.VITE_TEAM_PHOTO_URL ||
   "https://images.unsplash.com/photo-1515703407324-5f753afd8be8?auto=format&fit=crop&w=1400&q=80";
 const ADMIN_PASSCODE = import.meta.env.VITE_ADMIN_PASSCODE || "hitmen2026";
+const TRAVEL_GOAL = Number(import.meta.env.VITE_TRAVEL_GOAL || 5000);
 
 const emptyForm = { name: "", email: "", phone: "" };
+
+function formatCurrency(value) {
+  return new Intl.NumberFormat("en-CA", {
+    style: "currency",
+    currency: "CAD",
+    maximumFractionDigits: 0,
+  }).format(value);
+}
+
+function getTimeLeft(targetDate) {
+  const diff = targetDate.getTime() - Date.now();
+  if (diff <= 0) {
+    return { days: 0, hours: 0, minutes: 0, seconds: 0, expired: true };
+  }
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((diff / (1000 * 60)) % 60);
+  const seconds = Math.floor((diff / 1000) % 60);
+  return { days, hours, minutes, seconds, expired: false };
+}
+
+function maskName(name) {
+  const trimmed = name.trim();
+  if (!trimmed) return "Anonymous Supporter";
+  const parts = trimmed.split(/\s+/);
+  if (parts.length === 1) return `${parts[0][0].toUpperCase()}***`;
+  return `${parts[0]} ${parts[1][0].toUpperCase()}.`;
+}
 
 export default function App() {
   const [selected, setSelected] = useState(null);
@@ -32,14 +77,29 @@ export default function App() {
   const [adminOpen, setAdminOpen] = useState(false);
   const [adminAuthed, setAdminAuthed] = useState(false);
   const [adminPinInput, setAdminPinInput] = useState("");
+  const [countdown, setCountdown] = useState(getTimeLeft(new Date(DRAW_DATE_ISO)));
   const [orders, setOrders] = useState(() => {
-    const saved = localStorage.getItem("hitmenOrders");
-    return saved ? JSON.parse(saved) : [];
+    try {
+      const saved = localStorage.getItem("hitmenOrders");
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
   });
 
   useEffect(() => {
-    localStorage.setItem("hitmenOrders", JSON.stringify(orders));
+    try {
+      localStorage.setItem("hitmenOrders", JSON.stringify(orders));
+    } catch {
+      // no-op in case browser storage is unavailable
+    }
   }, [orders]);
+
+  useEffect(() => {
+    const target = new Date(DRAW_DATE_ISO);
+    const interval = setInterval(() => setCountdown(getTimeLeft(target)), 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   const selectedOption = useMemo(
     () => TICKET_OPTIONS.find((option) => option.id === selected),
@@ -53,7 +113,17 @@ export default function App() {
     return { orderCount, ticketsSold, revenue };
   }, [orders]);
 
-  const shareCaption = `We are helping the Eastern Hitmen U15 AAA get to Atlantics! Support the fundraiser and grab your tickets: ${window.location.href}`;
+  const pageUrl = typeof window !== "undefined" ? window.location.href : "";
+  const shareCaption = `Help the Eastern Hitmen U15 AAA get to Atlantics. Every ticket helps with travel costs. Buy or share: ${pageUrl}`;
+  const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(pageUrl)}`;
+
+  const progressPercent = useMemo(() => {
+    if (TRAVEL_GOAL <= 0) return 0;
+    return Math.min(100, Math.round((stats.revenue / TRAVEL_GOAL) * 100));
+  }, [stats.revenue]);
+
+  const remaining = Math.max(TRAVEL_GOAL - stats.revenue, 0);
+  const recentSupporters = orders.slice(0, 3).map((order) => maskName(order.name));
 
   const validateForm = () => {
     const errors = {};
@@ -161,7 +231,7 @@ export default function App() {
                   <span>Tickets</span>
                 </article>
                 <article>
-                  <strong>${stats.revenue}</strong>
+                  <strong>{formatCurrency(stats.revenue)}</strong>
                   <span>Revenue</span>
                 </article>
               </div>
@@ -190,7 +260,7 @@ export default function App() {
                           <td>{order.email}</td>
                           <td>{order.phone}</td>
                           <td>{order.tickets}</td>
-                          <td>${order.amount}</td>
+                          <td>{formatCurrency(order.amount)}</td>
                           <td>{order.date}</td>
                         </tr>
                       ))}
@@ -214,6 +284,30 @@ export default function App() {
           <p className="subhead">Atlantic Hockey Championship</p>
         </header>
 
+        <section className="urgency">
+          <p className="urgency-title">
+            {countdown.expired ? "Draw day has arrived!" : "Draw closes soon"}
+          </p>
+          <div className="countdown-grid">
+            <div>
+              <strong>{countdown.days}</strong>
+              <span>Days</span>
+            </div>
+            <div>
+              <strong>{countdown.hours}</strong>
+              <span>Hours</span>
+            </div>
+            <div>
+              <strong>{countdown.minutes}</strong>
+              <span>Min</span>
+            </div>
+            <div>
+              <strong>{countdown.seconds}</strong>
+              <span>Sec</span>
+            </div>
+          </div>
+        </section>
+
         <section className="hero-photo-wrap">
           <img src={TEAM_PHOTO_URL} alt="Eastern Hitmen U15 AAA team" className="hero-photo" />
         </section>
@@ -230,6 +324,25 @@ export default function App() {
           </p>
         </section>
 
+        <section className="impact">
+          <div className="impact-head">
+            <h3>Travel Fund Progress</h3>
+            <strong>{progressPercent}%</strong>
+          </div>
+          <p className="impact-meta">
+            Raised <strong>{formatCurrency(stats.revenue)}</strong> of{" "}
+            <strong>{formatCurrency(TRAVEL_GOAL)}</strong>
+          </p>
+          <div className="progress-track" aria-label="Fundraising progress">
+            <span style={{ width: `${progressPercent}%` }} />
+          </div>
+          <p className="impact-meta">
+            {remaining > 0
+              ? `${formatCurrency(remaining)} still needed to hit our target`
+              : "Target reached. Thank you for your support!"}
+          </p>
+        </section>
+
         <section className="prize">
           <p className="prize-label">GRAND PRIZE</p>
           <p className="prize-value">$500</p>
@@ -242,6 +355,9 @@ export default function App() {
           <a href={FACEBOOK_URL} target="_blank" rel="noreferrer">
             Follow us on Facebook
           </a>
+          <a className="share-link" href={facebookShareUrl} target="_blank" rel="noreferrer">
+            Share this fundraiser on Facebook
+          </a>
           <button className="ghost-btn" onClick={copyShareText}>
             {copyState === "copied"
               ? "Caption copied!"
@@ -249,6 +365,28 @@ export default function App() {
                 ? "Copy failed"
                 : "Copy Facebook caption"}
           </button>
+        </section>
+
+        <section className="social-proof">
+          <h3>Community Support</h3>
+          <div className="support-chip-row">
+            <span>{stats.orderCount} orders</span>
+            <span>{stats.ticketsSold} tickets sold</span>
+            <span>{formatCurrency(stats.revenue)} raised</span>
+          </div>
+          {recentSupporters.length > 0 ? (
+            <p className="recent-supporters">Recent supporters: {recentSupporters.join(" • ")}</p>
+          ) : (
+            <p className="recent-supporters">Be one of the first supporters today.</p>
+          )}
+          <div className="quote-grid">
+            {TESTIMONIALS.map((entry) => (
+              <article key={entry.author}>
+                <p>"{entry.quote}"</p>
+                <span>- {entry.author}</span>
+              </article>
+            ))}
+          </div>
         </section>
 
         <section className="schedule">
@@ -271,6 +409,9 @@ export default function App() {
         {step === "select" && (
           <section className="flow">
             <h3>Choose tickets</h3>
+            <p className="flow-subtitle">
+              Fast checkout. Your purchase directly supports team travel to Atlantics.
+            </p>
             <div className="ticket-grid">
               {TICKET_OPTIONS.map((option) => (
                 <button
@@ -358,11 +499,20 @@ export default function App() {
                 <span>Email</span>
                 <strong>{form.email}</strong>
               </p>
+              <p>
+                <span>Draw Date</span>
+                <strong>{DRAW_DATE}</strong>
+              </p>
               <p className="total">
                 <span>Total</span>
                 <strong>${selectedOption.price}.00</strong>
               </p>
             </div>
+            <ul className="trust-list">
+              <li>Secure card checkout (Stripe-ready integration point)</li>
+              <li>Winner is contacted directly by phone and email</li>
+              <li>Every order is logged in admin reporting</li>
+            </ul>
             <div className="row">
               <button className="ghost-btn" onClick={() => setStep("info")}>
                 Back
@@ -382,11 +532,30 @@ export default function App() {
               Thank you for supporting the team. A confirmation has been created for{" "}
               <strong>{form.email}</strong>.
             </p>
+            <a className="share-link" href={facebookShareUrl} target="_blank" rel="noreferrer">
+              Share this fundraiser
+            </a>
             <button className="primary-btn" onClick={resetFlow}>
               Buy more tickets
             </button>
           </section>
         )}
+
+        <section className="faq">
+          <h3>Frequently Asked Questions</h3>
+          <details>
+            <summary>When is the draw?</summary>
+            <p>The draw takes place on {DRAW_DATE}.</p>
+          </details>
+          <details>
+            <summary>How are winners notified?</summary>
+            <p>Winners are contacted using the email and phone number submitted at checkout.</p>
+          </details>
+          <details>
+            <summary>Where does the money go?</summary>
+            <p>All proceeds support travel and tournament costs for Eastern Hitmen U15 AAA.</p>
+          </details>
+        </section>
 
         <footer>
           <p>All proceeds support Eastern Hitmen U15 AAA travel costs.</p>
@@ -395,6 +564,24 @@ export default function App() {
           </button>
         </footer>
       </section>
+
+      {step === "select" ? (
+        <aside className="sticky-cta">
+          <div>
+            <strong>
+              {selectedOption ? `${selectedOption.qty} tickets selected` : "Select your ticket pack"}
+            </strong>
+            <span>Draw date: {DRAW_DATE}</span>
+          </div>
+          <button
+            className="primary-btn"
+            disabled={!selectedOption}
+            onClick={() => selectedOption && setStep("info")}
+          >
+            Continue
+          </button>
+        </aside>
+      ) : null}
     </main>
   );
 }

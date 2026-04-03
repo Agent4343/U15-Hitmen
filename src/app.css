@@ -21,7 +21,7 @@ body {
 
 .page {
   min-height: 100vh;
-  padding: 20px 14px 48px;
+  padding: 20px 14px 110px;
   display: grid;
   place-items: start center;
 }
@@ -65,6 +65,48 @@ body {
   opacity: 0.92;
 }
 
+.urgency {
+  background: #fdf2f3;
+  border-bottom: 1px solid #f4d3d7;
+  padding: 12px 18px;
+}
+
+.urgency-title {
+  margin: 0;
+  text-align: center;
+  color: #991b2f;
+  font-size: 0.86rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.countdown-grid {
+  margin-top: 8px;
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.countdown-grid div {
+  background: #fff;
+  border: 1px solid #f4d3d7;
+  border-radius: 10px;
+  text-align: center;
+  padding: 6px 4px;
+}
+
+.countdown-grid strong {
+  display: block;
+  font-size: 1rem;
+  color: #991b2f;
+}
+
+.countdown-grid span {
+  font-size: 0.65rem;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
 .hero-photo-wrap {
   width: 100%;
   border-bottom: 3px solid #d11731;
@@ -78,10 +120,13 @@ body {
 }
 
 .story,
+.impact,
 .prize,
 .social,
+.social-proof,
 .schedule,
 .flow,
+.faq,
 footer {
   padding: 18px 18px 0;
 }
@@ -92,10 +137,57 @@ footer {
   font-size: 1.25rem;
 }
 
+.flow-subtitle {
+  margin: -2px 0 10px;
+  color: #64748b;
+  font-size: 0.86rem;
+}
+
 .story p {
   margin: 0 0 10px;
   color: #475569;
   line-height: 1.5;
+}
+
+.impact {
+  background: linear-gradient(180deg, #f7fafc, #ffffff);
+  border-top: 1px solid #e8edf6;
+  border-bottom: 1px solid #e8edf6;
+}
+
+.impact-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.impact h3 {
+  margin: 0;
+}
+
+.impact-head strong {
+  color: #be123c;
+}
+
+.impact-meta {
+  margin: 8px 0;
+  font-size: 0.88rem;
+  color: #475569;
+}
+
+.progress-track {
+  width: 100%;
+  background: #e5e9f2;
+  border-radius: 999px;
+  height: 11px;
+  overflow: hidden;
+}
+
+.progress-track span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(130deg, #cf1f3a, #8f1628);
 }
 
 .prize {
@@ -147,7 +239,8 @@ footer {
   gap: 10px;
 }
 
-.social a {
+.social a,
+.share-link {
   display: inline-flex;
   justify-content: center;
   text-decoration: none;
@@ -156,6 +249,66 @@ footer {
   border-radius: 10px;
   font-weight: 700;
   padding: 10px 12px;
+}
+
+.share-link {
+  background: #123d78;
+  color: #fff;
+  border-radius: 10px;
+}
+
+.social-proof h3,
+.faq h3 {
+  margin: 0 0 10px;
+}
+
+.support-chip-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.support-chip-row span {
+  border: 1px solid #dbe3ef;
+  background: #f8fbff;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.recent-supporters {
+  margin: 10px 0 12px;
+  color: #64748b;
+  font-size: 0.84rem;
+}
+
+.quote-grid {
+  display: grid;
+  gap: 8px;
+}
+
+.quote-grid article {
+  border: 1px solid #e3e9f2;
+  border-radius: 10px;
+  padding: 10px;
+  background: #f8fafc;
+}
+
+.quote-grid p {
+  margin: 0;
+  color: #334155;
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+.quote-grid span {
+  display: block;
+  margin-top: 6px;
+  color: #64748b;
+  font-size: 0.78rem;
+  font-weight: 600;
 }
 
 .schedule {
@@ -307,6 +460,18 @@ input:focus {
   margin-bottom: 12px;
 }
 
+.trust-list {
+  margin: 0 0 12px;
+  padding-left: 18px;
+  color: #475569;
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+.trust-list li + li {
+  margin-top: 4px;
+}
+
 .summary p {
   display: flex;
   justify-content: space-between;
@@ -385,6 +550,30 @@ button:disabled {
 .trust-text {
   color: #64748b;
   font-size: 0.85rem;
+}
+
+.faq details {
+  border: 1px solid #e5e9f2;
+  border-radius: 10px;
+  padding: 8px 10px;
+  background: #f8fbff;
+}
+
+.faq details + details {
+  margin-top: 8px;
+}
+
+.faq summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.faq details p {
+  margin: 8px 0 2px;
+  color: #475569;
+  font-size: 0.86rem;
+  line-height: 1.5;
 }
 
 footer {
@@ -488,8 +677,62 @@ th {
   color: #64748b;
 }
 
+.sticky-cta {
+  position: fixed;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  z-index: 40;
+  background: rgba(9, 18, 35, 0.95);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(4px);
+  border-radius: 12px;
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.35);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.sticky-cta div {
+  min-width: 0;
+}
+
+.sticky-cta strong {
+  display: block;
+  font-size: 0.88rem;
+}
+
+.sticky-cta span {
+  display: block;
+  color: #c8d4e5;
+  font-size: 0.76rem;
+  margin-top: 2px;
+}
+
+.sticky-cta button {
+  width: auto;
+  min-width: 120px;
+  padding: 10px 12px;
+}
+
 @media (max-width: 420px) {
   .ticket-grid {
     grid-template-columns: 1fr;
+  }
+
+  .countdown-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sticky-cta {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .sticky-cta button {
+    width: 100%;
   }
 }
