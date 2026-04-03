@@ -343,6 +343,17 @@ footer {
   gap: 10px;
 }
 
+.supporter-list .supporter-name {
+  color: #334155;
+  font-weight: 700;
+}
+
+.supporter-list .supporter-amount {
+  color: #be123c;
+  font-weight: 800;
+  text-align: right;
+}
+
 .supporter-name {
   color: #334155;
   font-weight: 600;

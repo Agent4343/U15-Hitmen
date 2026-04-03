@@ -45,8 +45,16 @@ function getTimeLeft(targetDate) {
 }
 
 function supporterDisplayName(order) {
-  if (order.showNameOnWall && order.name?.trim()) return order.name.trim();
+  if (order.showNameOnWall && order.name?.trim()) {
+    const parts = order.name.trim().split(/\s+/);
+    if (parts.length === 1) return parts[0];
+    return `${parts[0]} ${parts[1][0].toUpperCase()}.`;
+  }
   return "Anonymous Supporter";
+}
+
+function pluralize(count, singular, plural) {
+  return `${count} ${count === 1 ? singular : (plural || `${singular}s`)}`;
 }
 
 export default function App() {
@@ -345,8 +353,8 @@ export default function App() {
         <section className="social-proof">
           <h3>Community Support</h3>
           <div className="support-chip-row">
-            <span>{stats.orderCount} orders</span>
-            <span>{stats.ticketsSold} tickets sold</span>
+            <span>{pluralize(stats.orderCount, "order")}</span>
+            <span>{pluralize(stats.ticketsSold, "ticket")} sold</span>
             <span>{formatCurrency(stats.revenue)} raised</span>
           </div>
           <p className="recent-supporters">
@@ -358,9 +366,9 @@ export default function App() {
             <ul className="supporter-wall">
               {supporterWall.map((entry) => (
                 <li key={entry.id}>
-                  <span>{entry.name}</span>
-                  <span>
-                    {entry.amount} ({entry.tickets} {entry.tickets > 1 ? "tickets" : "ticket"})
+                  <span className="supporter-name">{entry.name}</span>
+                  <span className="supporter-amount">
+                    {entry.amount} ({pluralize(entry.tickets, "ticket")})
                   </span>
                 </li>
               ))}
