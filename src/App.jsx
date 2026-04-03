@@ -31,9 +31,10 @@ const TESTIMONIALS = [
 const DRAW_DATE = "April 14, 2026";
 const DRAW_DATE_ISO = "2026-04-14T20:00:00-03:00";
 const FACEBOOK_URL = "https://www.facebook.com/share/g/1E3h74upXv/?mibextid=wwXIfr";
-const TEAM_PHOTO_URL =
-  import.meta.env.VITE_TEAM_PHOTO_URL ||
+const DEFAULT_POSTER_PATH = "/images/team-poster.jpg";
+const FALLBACK_PHOTO_URL =
   "https://images.unsplash.com/photo-1515703407324-5f753afd8be8?auto=format&fit=crop&w=1400&q=80";
+const TEAM_PHOTO_URL = import.meta.env.VITE_TEAM_PHOTO_URL || DEFAULT_POSTER_PATH;
 const ADMIN_PASSCODE = import.meta.env.VITE_ADMIN_PASSCODE || "hitmen2026";
 const TRAVEL_GOAL = Number(import.meta.env.VITE_TRAVEL_GOAL || 5000);
 
@@ -77,6 +78,7 @@ export default function App() {
   const [adminOpen, setAdminOpen] = useState(false);
   const [adminAuthed, setAdminAuthed] = useState(false);
   const [adminPinInput, setAdminPinInput] = useState("");
+  const [heroImageSrc, setHeroImageSrc] = useState(TEAM_PHOTO_URL);
   const [countdown, setCountdown] = useState(getTimeLeft(new Date(DRAW_DATE_ISO)));
   const [orders, setOrders] = useState(() => {
     try {
@@ -309,7 +311,14 @@ export default function App() {
         </section>
 
         <section className="hero-photo-wrap">
-          <img src={TEAM_PHOTO_URL} alt="Eastern Hitmen U15 AAA team" className="hero-photo" />
+          <img
+            src={heroImageSrc}
+            alt="Eastern Hitmen U15 AAA team"
+            className="hero-photo"
+            onError={() => {
+              if (heroImageSrc !== FALLBACK_PHOTO_URL) setHeroImageSrc(FALLBACK_PHOTO_URL);
+            }}
+          />
         </section>
 
         <section className="story">
