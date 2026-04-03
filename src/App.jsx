@@ -46,9 +46,7 @@ function getTimeLeft(targetDate) {
 
 function supporterDisplayName(order) {
   if (order.showNameOnWall && order.name?.trim()) {
-    const parts = order.name.trim().split(/\s+/);
-    if (parts.length === 1) return parts[0];
-    return `${parts[0]} ${parts[1][0].toUpperCase()}.`;
+    return order.name.trim();
   }
   return "Anonymous Supporter";
 }
