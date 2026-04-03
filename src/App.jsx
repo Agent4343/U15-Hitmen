@@ -16,6 +16,7 @@ const GAMES = [
 const DRAW_DATE = "April 14, 2026";
 const DRAW_DATE_ISO = "2026-04-14T20:00:00-03:00";
 const FACEBOOK_URL = "https://www.facebook.com/profile.php/?id=61565613223653";
+const LIVE_STREAM_URL = "https://www.facebook.com/groups/199251928429680";
 const DEFAULT_POSTER_PATH = "/images/hitmen.jpg";
 const FALLBACK_PHOTO_URL =
   "https://images.unsplash.com/photo-1515703407324-5f753afd8be8?auto=format&fit=crop&w=1400&q=80";
@@ -389,6 +390,12 @@ export default function App() {
               </div>
             </div>
           ))}
+          <div className="live-stream-cta">
+            <p>Watch Atlantics live on Facebook during the game dates and times above.</p>
+            <a href={LIVE_STREAM_URL} target="_blank" rel="noreferrer">
+              Watch Live on Facebook
+            </a>
+          </div>
         </section>
 
         {step === "select" && (

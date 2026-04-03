@@ -430,6 +430,32 @@ footer {
   color: #64748b;
 }
 
+.live-stream-cta {
+  margin-top: 12px;
+  border: 1px solid #dbe3ef;
+  border-radius: 10px;
+  background: #f8fbff;
+  padding: 12px;
+}
+
+.live-stream-cta p {
+  margin: 0 0 10px;
+  color: #334155;
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+.live-stream-cta a {
+  display: inline-flex;
+  justify-content: center;
+  text-decoration: none;
+  background: #1877f2;
+  color: #fff;
+  border-radius: 10px;
+  font-weight: 700;
+  padding: 10px 12px;
+}
+
 .ticket-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
