@@ -5,7 +5,7 @@ Redesigned, mobile-first fundraiser landing page for the Eastern Hitmen U15 AAA 
 ## What is included
 
 - Facebook-friendly hero and social CTA
-- Conversion-focused upgrades (urgency countdown, fundraising progress, social proof)
+- Conversion-focused upgrades (urgency countdown, social proof, supporter wall)
 - Improved ticket checkout flow (select -> info -> confirm -> success)
 - Admin view for order summary (client-side demo)
 - Open Graph metadata in `index.html` for better social sharing previews
@@ -26,7 +26,6 @@ Create a `.env` file (or set these in Railway):
 # Optional: if omitted, app uses /images/hitmen.jpg from /public
 VITE_TEAM_PHOTO_URL=https://your-team-photo-url
 VITE_ADMIN_PASSCODE=your-secret-passcode
-VITE_TRAVEL_GOAL=5000
 ```
 
 ### Using your exact fundraiser poster

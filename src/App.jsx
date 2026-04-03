@@ -13,21 +13,6 @@ const GAMES = [
   { day: "SAT", date: "APR 18", time: "3:00 - 5:30 PM", opponent: "vs. Team NB" },
 ];
 
-const TESTIMONIALS = [
-  {
-    quote: "Great cause and easy checkout. Happy to support these hardworking players.",
-    author: "Local Supporter",
-  },
-  {
-    quote: "The team has represented our community so well. Proud to help them get to Atlantics.",
-    author: "Parent Volunteer",
-  },
-  {
-    quote: "Love this fundraiser format. Quick to buy and easy to share on Facebook.",
-    author: "Team Fan",
-  },
-];
-
 const DRAW_DATE = "April 14, 2026";
 const DRAW_DATE_ISO = "2026-04-14T20:00:00-03:00";
 const FACEBOOK_URL = "https://www.facebook.com/profile.php/?id=61565613223653";
@@ -36,9 +21,8 @@ const FALLBACK_PHOTO_URL =
   "https://images.unsplash.com/photo-1515703407324-5f753afd8be8?auto=format&fit=crop&w=1400&q=80";
 const TEAM_PHOTO_URL = import.meta.env.VITE_TEAM_PHOTO_URL || DEFAULT_POSTER_PATH;
 const ADMIN_PASSCODE = import.meta.env.VITE_ADMIN_PASSCODE || "hitmen2026";
-const TRAVEL_GOAL = Number(import.meta.env.VITE_TRAVEL_GOAL || 5000);
 
-const emptyForm = { name: "", email: "", phone: "" };
+const emptyForm = { name: "", email: "", phone: "", showNameOnWall: false };
 
 function formatCurrency(value) {
   return new Intl.NumberFormat("en-CA", {
@@ -60,12 +44,9 @@ function getTimeLeft(targetDate) {
   return { days, hours, minutes, seconds, expired: false };
 }
 
-function maskName(name) {
-  const trimmed = name.trim();
-  if (!trimmed) return "Anonymous Supporter";
-  const parts = trimmed.split(/\s+/);
-  if (parts.length === 1) return `${parts[0][0].toUpperCase()}***`;
-  return `${parts[0]} ${parts[1][0].toUpperCase()}.`;
+function supporterDisplayName(order) {
+  if (order.showNameOnWall && order.name?.trim()) return order.name.trim();
+  return "Anonymous Supporter";
 }
 
 export default function App() {
@@ -119,13 +100,16 @@ export default function App() {
   const shareCaption = `Help the Eastern Hitmen U15 AAA get to Atlantics. Every ticket helps with travel costs. Buy or share: ${pageUrl}`;
   const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(pageUrl)}`;
 
-  const progressPercent = useMemo(() => {
-    if (TRAVEL_GOAL <= 0) return 0;
-    return Math.min(100, Math.round((stats.revenue / TRAVEL_GOAL) * 100));
-  }, [stats.revenue]);
-
-  const remaining = Math.max(TRAVEL_GOAL - stats.revenue, 0);
-  const recentSupporters = orders.slice(0, 3).map((order) => maskName(order.name));
+  const supporterWall = useMemo(
+    () =>
+      orders.slice(0, 12).map((order) => ({
+        id: order.id,
+        name: supporterDisplayName(order),
+        amount: formatCurrency(order.amount),
+        tickets: order.tickets,
+      })),
+    [orders],
+  );
 
   const validateForm = () => {
     const errors = {};
@@ -151,6 +135,7 @@ export default function App() {
     const order = {
       id: `HIT-${Date.now().toString(36).toUpperCase()}`,
       ...form,
+      showNameOnWall: form.showNameOnWall,
       tickets: selectedOption.qty,
       amount: selectedOption.price,
       date: new Date().toLocaleString(),
@@ -333,25 +318,6 @@ export default function App() {
           </p>
         </section>
 
-        <section className="impact">
-          <div className="impact-head">
-            <h3>Travel Fund Progress</h3>
-            <strong>{progressPercent}%</strong>
-          </div>
-          <p className="impact-meta">
-            Raised <strong>{formatCurrency(stats.revenue)}</strong> of{" "}
-            <strong>{formatCurrency(TRAVEL_GOAL)}</strong>
-          </p>
-          <div className="progress-track" aria-label="Fundraising progress">
-            <span style={{ width: `${progressPercent}%` }} />
-          </div>
-          <p className="impact-meta">
-            {remaining > 0
-              ? `${formatCurrency(remaining)} still needed to hit our target`
-              : "Target reached. Thank you for your support!"}
-          </p>
-        </section>
-
         <section className="prize">
           <p className="prize-label">GRAND PRIZE</p>
           <p className="prize-value">$500</p>
@@ -383,19 +349,23 @@ export default function App() {
             <span>{stats.ticketsSold} tickets sold</span>
             <span>{formatCurrency(stats.revenue)} raised</span>
           </div>
-          {recentSupporters.length > 0 ? (
-            <p className="recent-supporters">Recent supporters: {recentSupporters.join(" • ")}</p>
+          <p className="recent-supporters">
+            Supporters can choose to display their name or stay anonymous.
+          </p>
+          {supporterWall.length === 0 ? (
+            <p className="recent-supporters">No purchases yet. Be the first supporter today.</p>
           ) : (
-            <p className="recent-supporters">Be one of the first supporters today.</p>
+            <ul className="supporter-wall">
+              {supporterWall.map((entry) => (
+                <li key={entry.id}>
+                  <span>{entry.name}</span>
+                  <span>
+                    {entry.amount} ({entry.tickets} {entry.tickets > 1 ? "tickets" : "ticket"})
+                  </span>
+                </li>
+              ))}
+            </ul>
           )}
-          <div className="quote-grid">
-            {TESTIMONIALS.map((entry) => (
-              <article key={entry.author}>
-                <p>"{entry.quote}"</p>
-                <span>- {entry.author}</span>
-              </article>
-            ))}
-          </div>
         </section>
 
         <section className="schedule">
@@ -479,6 +449,16 @@ export default function App() {
                 placeholder="(506) 555-1234"
               />
               {formErrors.phone ? <small className="error">{formErrors.phone}</small> : null}
+            </label>
+            <label className="wall-opt-in">
+              <input
+                type="checkbox"
+                checked={form.showNameOnWall}
+                onChange={(event) =>
+                  setForm((prev) => ({ ...prev, showNameOnWall: event.target.checked }))
+                }
+              />
+              <span>Show my name on the supporter wall (optional)</span>
             </label>
 
             <div className="row">

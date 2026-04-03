@@ -260,6 +260,7 @@ footer {
 }
 
 .social-proof h3,
+.supporter-wall h3,
 .faq h3 {
   margin: 0 0 10px;
 }
@@ -311,6 +312,63 @@ footer {
   color: #64748b;
   font-size: 0.78rem;
   font-weight: 600;
+}
+
+.supporter-wall {
+  margin-top: 12px;
+}
+
+.supporter-note {
+  margin: 0 0 10px;
+  color: #64748b;
+  font-size: 0.84rem;
+}
+
+.supporter-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 8px;
+}
+
+.supporter-list li {
+  border: 1px solid #e3e9f2;
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: #f8fafc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.supporter-name {
+  color: #334155;
+  font-weight: 600;
+}
+
+.supporter-amount {
+  color: #be123c;
+  font-weight: 800;
+}
+
+.name-consent {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 2px 0 14px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #334155;
+}
+
+.name-consent input {
+  width: auto;
+  margin: 0;
+  border: 0;
+  box-shadow: none;
+  accent-color: #ce1e38;
 }
 
 .schedule {
