@@ -109,13 +109,15 @@ body {
 
 .hero-photo-wrap {
   width: 100%;
+  background: #0b1528;
   border-bottom: 3px solid #d11731;
 }
 
 .hero-photo {
   width: 100%;
-  max-height: 280px;
-  object-fit: cover;
+  max-height: 760px;
+  object-fit: contain;
+  object-position: center;
   display: block;
 }
 
